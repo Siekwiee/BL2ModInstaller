@@ -1,85 +1,53 @@
 # BL2ModInstaller
 
-A robust and user-friendly Borderlands 2 mod installer with comprehensive mod support and safety features.
+A tool for installing and managing Borderlands 2 mods. This tool helps you install mods while maintaining backups of your original game files.
 
-## Features
+## Prerequisites
 
-- **Progress Tracking**
-  - Real-time progress indicators for all file operations
-  - Detailed status updates during installation process
+To build the project, you'll need:
 
-- **Mod Compatibility**
-  - Automatic dependency checking and validation
-  - Mod version compatibility verification
-  - Conflict detection between installed mods
+1. [LuaJIT](https://luajit.org/download.html) - The Just-In-Time Compiler for Lua
+2. [LuaRocks](https://github.com/luarocks/luarocks/wiki/Installation-instructions-for-Windows) - The package manager for Lua
 
-- **Backup System**
-  - Automatic backup creation before mod installation
-  - Easy restore functionality for previous game states
-  - Backup management interface
+## Building from Source
 
-- **Multi-Format Support**
-  - Simple .txt mods
-  - BLCMM mod files
-  - Custom mesh and texture modifications
-  - Save file modifications
-  - Comprehensive mod package handling
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/bl2modinstaller
+   cd bl2modinstaller
+   ```
 
-## Dependencies
+2. Run the build script:
+   ```bash
+   build.bat
+   ```
 
-### Required
-- LuaZip - For handling ZIP archive extraction
-- LuaFileSystem - Enhanced file system operations
-
-### Optional
-- Native file dialogs (FFI) - For improved UI experience
-
-## Installation Flow
-
-1. **Game Detection**
-   - Automatic detection of Borderlands 2 installation
-   - Manual path selection option
-   - Validation of game installation
-
-2. **Mod Selection**
-   - Support for both single files and mod folders
-   - Drag-and-drop interface
-   - Bulk mod installation capability
-
-3. **Installation Process**
-   - Path validation and verification
-   - Mod compatibility checking
-   - Automatic backup creation
-   - Intelligent file placement
-   - Special handling for BLCMM mods
-   - Real-time progress tracking
-   - Detailed success/error reporting
+   This will:
+   - Install required dependencies
+   - Build the project
+   - Create an executable in the `bin` directory
 
 ## Usage
 
-1. Launch BL2ModInstaller
-2. Select or confirm your Borderlands 2 installation directory
-3. Choose the mod(s) you want to install
-4. Review the compatibility check results
-5. Confirm installation
-6. Monitor progress through the installation interface
+After building, you can run the installer using:
+```bash
+bin\bl2modinstaller.bat
+```
 
-## Backup Management
+The tool will:
+- Automatically detect your Borderlands 2 installation
+- Create backups before installing mods
+- Manage multiple backups
+- Install mods safely
 
-- Backups are stored in `[game_path]/BL2ModInstaller/backups`
-- Each backup is timestamped and labeled with mod information
-- Use the restore feature to revert to any previous game state
-- Automatic cleanup of old backups (configurable)
+## Dependencies
 
-## Troubleshooting
-
-- Check the log file at `[game_path]/BL2ModInstaller/logs` for detailed error information
-- Verify that all dependencies are correctly installed
-- Ensure sufficient disk space for backups
-- Run the installer with administrator privileges if required
+- LuaFileSystem (lfs)
+- Lua-Zip
+- LuaJIT
 
 ## License
 
-[License Type] - See LICENSE file for details
+MIT License
 
 
