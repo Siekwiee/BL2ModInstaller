@@ -1,16 +1,12 @@
 -- BL2ModInstaller Main Script
 local lfs = require("lfs")
-local zip = require("zip")
 local logger = require("logger")
 local modHandlers = require("mod_handlers")
+local config = require("config")
+local ui = require("ui")
 
--- Configuration
-local config = {
-    backupDir = "BL2ModInstaller/backups",
-    logDir = "BL2ModInstaller/logs",
-    tempDir = "BL2ModInstaller/temp",
-    maxBackups = 5  -- Maximum number of backups to keep
-}
+-- Main controller
+local controller = {}
 
 -- Utility Functions
 local function ensureDirectory(path)
@@ -21,15 +17,9 @@ local function ensureDirectory(path)
 end
 
 -- Game Detection
-local function detectGamePath()
-    -- Common installation paths
-    local commonPaths = {
-        "C:/Program Files (x86)/Steam/steamapps/common/Borderlands 2",
-        "C:/Program Files/Steam/steamapps/common/Borderlands 2",
-        -- Add more common paths as needed
-    }
-    
-    for _, path in ipairs(commonPaths) do
+function controller.detectGamePath()
+    -- Check common installation paths
+    for _, path in ipairs(config.defaultGamePaths) do
         if lfs.attributes(path) then
             return path
         end
@@ -73,7 +63,6 @@ local function createBackup(gamePath)
     local dirsToBackup = {
         "Binaries",
         "WillowGame/CookedPCConsole",
-        -- Add more directories as needed
     }
     
     for _, dir in ipairs(dirsToBackup) do
@@ -134,7 +123,7 @@ local function cleanupOldBackups(gamePath)
 end
 
 -- Mod Installation
-local function installMod(modPath, gamePath)
+function controller.installMod(modPath, gamePath)
     -- Validate paths
     if not lfs.attributes(modPath) then
         error("Mod file not found: " .. modPath)
@@ -166,39 +155,31 @@ local function installMod(modPath, gamePath)
     end
     
     logger.info("Mod installation completed successfully")
+    return true
 end
 
--- Main Program Flow
-local function main()
+-- Initialize the application
+local function init()
     logger.info("BL2ModInstaller Starting...")
     
-    -- Initialize logger
-    local gamePath = detectGamePath()
-    if not gamePath then
-        error("Could not detect Borderlands 2 installation")
+    -- Auto-detect game path
+    local gamePath = controller.detectGamePath()
+    if gamePath then
+        logger.info("Game installation found at: " .. gamePath)
+    else
+        logger.warning("Could not auto-detect Borderlands 2 installation")
     end
     
-    logger.init(gamePath .. "/" .. config.logDir)
+    -- Initialize logger
+    logger.init("BL2ModInstaller_log")
+    logger.setLevel(logger.LEVELS.DEBUG)
     
-    -- Ensure required directories exist
-    ensureDirectory(gamePath .. "/" .. config.backupDir)
-    ensureDirectory(gamePath .. "/" .. config.logDir)
-    ensureDirectory(gamePath .. "/" .. config.tempDir)
+    -- Initialize UI
+    ui.init(controller)
     
-    logger.info("Game installation found at: " .. gamePath)
-    
-    -- TODO: Implement mod selection and installation flow
-    -- For now, this will be handled by the calling code
-    
-    return gamePath
+    -- Show the UI
+    ui.show()
 end
 
--- Error handling wrapper
-local success, result = pcall(main)
-if success then
-    logger.info("Program completed successfully")
-    return result
-else
-    logger.error("Error: " .. tostring(result))
-    return nil, result
-end
+-- Start the application
+init()
